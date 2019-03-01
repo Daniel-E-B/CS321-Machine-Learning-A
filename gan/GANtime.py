@@ -13,10 +13,9 @@ from keras.utils import to_categorical
 
 import matplotlib
 matplotlib.use('Agg')  # no x server
-import matplotlib.pyplot as plt
 
 
-images_dir = "dcgan_images_m"
+images_dir = "dcgan_images_m_allnums_real"
 img_rows = 28
 img_cols = 28
 channels = 1
@@ -53,7 +52,7 @@ def build_discriminator():
     model.add(Dropout(0.25))
 
     model.add(Flatten())
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(11, activation='sigmoid'))
 
     return model
 
@@ -138,7 +137,15 @@ def save_imgs(generator, epoch):
     noise = np.random.normal(0, 1, (r * c, noise_len))
     # only generate a certain thing
     # num = np.eye(num_digits)[np.random.choice(num_digits, r * c)]
-    num = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 1]] * 5 * 5) # only generate 9's
+    num = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0], 
+                    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],])
+    # num = np.array([[0, 0, 0, 0, 0, 1, 0, 0, 0, 0]]
+    #                * 5 * 5)  # only generate 9's
 
     input = np.concatenate((noise, num), axis=1)
     gen_imgs = generator.predict(input)
@@ -200,24 +207,25 @@ def train(generator, discriminator, combined, epochs, batch_size=128, save_inter
         gen_imgs = generator.predict(input)
 
         # Train the discriminator (real classified as ones and generated as zeros)
-        # TODO: discriminator has 11 outputs. Real/fake, 0/not a 0, 1/not a 1, 2/not a 2, etc
+        # discriminator has 11 outputs. Real/fake, 0/not a 0, 1/not a 1, 2/not a 2, etc
         d_loss_real = discriminator.train_on_batch(
-            imgs, np.ones((half_batch, 1)))
+            imgs, np.concatenate((np.ones((half_batch, 1)), num), axis=1))
         d_loss_fake = discriminator.train_on_batch(
-            gen_imgs, np.zeros((half_batch, 1)))
+            gen_imgs, np.zeros((half_batch, 11)))
 
         # ---------------------
         #  Train Generator
         # ---------------------
 
         idx = np.random.randint(0, X_train.shape[0], batch_size)
-        imgs = X_train[idx]
+        imgs = X_train[idx]  # maybe I don't need this line
         num = Y_train[idx]
         noise = np.random.normal(0, 1, (batch_size, noise_len))
         input = np.concatenate((noise, num), axis=1)
 
         # Train the generator (wants discriminator to mistake images as real)
-        g_loss = combined.train_on_batch(input, np.ones((batch_size, 1)))
+        g_loss = combined.train_on_batch(input, np.concatenate(
+            (np.ones((batch_size, 1)), num), axis=1))
 
         # If at save interval => save generated image samples and plot progress
         if epoch % save_interval == 0:
@@ -248,4 +256,4 @@ if (not os.path.isdir(images_dir)):
 
 generator, discriminator, combined = build_combined()
 train(generator, discriminator, combined,
-      epochs=4001, batch_size=32, save_interval=50)
+      epochs=10001, batch_size=64, save_interval=50)
