@@ -1,2 +1,12 @@
 .DS_Store
 .vscode
+.idea
+cmake-build-debug
+._*
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles
+Makefile
+SFML_python_test
+*.cbp
+*.out
