@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <boost/python.hpp>
 
 int main() {
     sf::ContextSettings settings;
