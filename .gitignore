@@ -10,3 +10,4 @@ Makefile
 SFML_python_test
 *.cbp
 *.out
+*.gch
