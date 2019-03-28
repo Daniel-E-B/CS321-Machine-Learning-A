@@ -4,7 +4,7 @@
 Player::Player(sf::Vector2f &pos) {
     shape = sf::CircleShape(SIZE);
     shape.setFillColor(COLOR);
-    shape.setOrigin(SIZE / 2, SIZE / 2);
+    shape.setOrigin(SIZE, SIZE);
     shape.setPosition(pos);
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Drawable.hpp"
 
-class GameObject {
+class GameObject : public Drawable{
    public:
-    virtual void draw(sf::RenderWindow &) {}
     virtual void move(sf::Vector2f &) {}
 };
