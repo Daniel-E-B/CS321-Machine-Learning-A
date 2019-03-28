@@ -1,8 +1,8 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "Basket.hpp"
-#include "Player.hpp"
+#include <SFML/Graphics.hpp>
+
+#include "Game.hpp"
 
 int main() {
     const int WIDTH = 1280, HEIGHT = 720;
@@ -13,8 +13,10 @@ int main() {
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
 
-    Player p(*(new sf::Vector2f(WIDTH / 2, HEIGHT / 2))); // there has to be a better way
-    Basket b(*new sf::Vector2f(WIDTH/2, HEIGHT));
+    // Food p(*(new sf::Vector2f(WIDTH / 2, HEIGHT / 2))); // there has to be a better way
+    // Basket b(*new sf::Vector2f(WIDTH/2, HEIGHT));
+    Game g(100, window);
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -24,8 +26,9 @@ int main() {
             }
         }
         window.clear(sf::Color::Black);
-        p.draw(window);
-        b.draw(window);
+        // p.draw(window);
+        // b.draw(window);
+        g.draw(window);
         window.display();
     }
     return 0;
