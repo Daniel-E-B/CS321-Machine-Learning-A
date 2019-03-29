@@ -5,6 +5,7 @@
 #include "Game.hpp"
 
 int main() {
+    srand(time(NULL));
     const int WIDTH = 1280, HEIGHT = 720;
 
     sf::ContextSettings ctx;
@@ -15,8 +16,7 @@ int main() {
 
     // Food p(*(new sf::Vector2f(WIDTH / 2, HEIGHT / 2))); // there has to be a better way
     // Basket b(*new sf::Vector2f(WIDTH/2, HEIGHT));
-    Game g(100, window);
-
+    Game g(window);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -28,8 +28,12 @@ int main() {
         window.clear(sf::Color::Black);
         // p.draw(window);
         // b.draw(window);
-        g.draw(window);
-        window.display();
+        while (true) {
+            g.tick();
+            window.clear(sf::Color::Black);
+            g.draw(window);
+            window.display();
+        }
     }
     return 0;
 }

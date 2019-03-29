@@ -10,16 +10,15 @@
 
 class Game : public Drawable {
    private:
-    std::vector<Food> foods;
+    Food *food;
     Basket *basket;
     int currentFood = 0;
 
    public:
     void draw(sf::RenderWindow &);
-    Game(int, sf::RenderWindow &);  // num foods
+    Game(sf::RenderWindow &);  // num foods
     bool tick();                    // returns true if generation is complete
     void mutate();                  // probably have parameters
-    void setFood(int);              // food # in array TODO: rename food to fruit
-    std::vector<double> getFitness();
-    double getAvgFitness();
+    void setFood(sf::Vector2f &, sf::Vector2f &);              // pos, mvmntvec
+    double getFitness();
 };
