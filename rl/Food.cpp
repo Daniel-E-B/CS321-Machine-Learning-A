@@ -15,5 +15,6 @@ void Food::draw(sf::RenderWindow &window) {
 }
 
 void Food::move() {
+    // bounce if it moves offscreen by the angle off the wall
     shape.move(mvmntVec);
 }

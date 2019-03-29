@@ -13,6 +13,7 @@ class Game : public Drawable {
     Food *food;
     Basket *basket;
     int currentFood = 0;
+    const int MAX_SPEED_COMPONENT = 5;
 
    public:
     void draw(sf::RenderWindow &);

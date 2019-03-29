@@ -1,8 +1,8 @@
 #include "Basket.hpp"
 
 Basket::Basket(sf::Vector2f &pos) {
-    shape = sf::RectangleShape(*(new sf::Vector2f(SIZE, SIZE / 10)));
-    shape.setOrigin(SIZE / 2, SIZE/10);
+    shape = sf::RectangleShape(*(new sf::Vector2f(SIZE, SIZE)));
+    shape.setOrigin(SIZE / 2, SIZE / 2);
     shape.setFillColor(COLOR);
     shape.setPosition(pos);
 }

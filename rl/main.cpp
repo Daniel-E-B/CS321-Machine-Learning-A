@@ -5,7 +5,6 @@
 #include "Game.hpp"
 
 int main() {
-    srand(time(NULL));
     const int WIDTH = 1280, HEIGHT = 720;
 
     sf::ContextSettings ctx;

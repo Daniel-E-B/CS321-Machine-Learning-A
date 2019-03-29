@@ -8,7 +8,7 @@ class Basket : public GameObject {
    private:
     sf::RectangleShape shape;
     const sf::Color COLOR = sf::Color(127, 127, 0);
-    const double SIZE = 300; // width
+    const double SIZE = 30; // width
 
    public:
     Basket(sf::Vector2f &);
