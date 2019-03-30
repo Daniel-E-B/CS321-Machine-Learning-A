@@ -1,0 +1,3 @@
+[submodule "rl/tiny-dnn"]
+	path = rl/tiny-dnn
+	url = https://github.com/tiny-dnn/tiny-dnn.git

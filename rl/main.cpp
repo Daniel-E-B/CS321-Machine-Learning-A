@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Game.hpp"
+#include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
 int main() {
     const int WIDTH = 1280, HEIGHT = 720;
@@ -13,8 +14,6 @@ int main() {
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
 
-    // Food p(*(new sf::Vector2f(WIDTH / 2, HEIGHT / 2))); // there has to be a better way
-    // Basket b(*new sf::Vector2f(WIDTH/2, HEIGHT));
     Game g(window);
 
     while (window.isOpen()) {
@@ -25,14 +24,11 @@ int main() {
             }
         }
         window.clear(sf::Color::Black);
-        // p.draw(window);
-        // b.draw(window);
-        while (true) {
-            g.tick();
-            window.clear(sf::Color::Black);
-            g.draw(window);
-            window.display();
-        }
+
+        g.tick();
+        window.clear(sf::Color::Black);
+        g.draw(window);
+        window.display();
     }
     return 0;
 }
