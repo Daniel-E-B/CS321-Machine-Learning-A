@@ -27,8 +27,13 @@ void Food::move(sf::RenderWindow &window) {
     // right collision
     if (shape.getPosition().x + SIZE >= window.getSize().x)
         mvmntVec = *(new sf::Vector2f(-mvmntVec.x, mvmntVec.y));
-        
+
     shape.move(mvmntVec);
+}
+
+void Food::reset(sf::Vector2f &pos, sf::Vector2f &mvmntVec_) {
+    shape.setPosition(pos);
+    mvmntVec = mvmntVec_; 
 }
 
 sf::Vector2f Food::getPos() {

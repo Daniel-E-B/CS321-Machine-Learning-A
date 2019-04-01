@@ -20,3 +20,7 @@ void Basket::move(sf::Vector2f const &targetPos) { // TODO: make more things con
     tiny_dnn::vec_t pred = net.predict({targetPos.x, targetPos.y});
     shape.move(*(new sf::Vector2f(pred[0], pred[1])));
 }
+
+sf::Vector2f Basket::getPos() {
+    return shape.getPosition();
+}

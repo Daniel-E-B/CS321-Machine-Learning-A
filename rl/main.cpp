@@ -51,6 +51,7 @@ int main() {
         window.clear(sf::Color::Black);
         g.draw(window);
         window.display();
+        // TODO: call generation() in a thread, so that the window will not freeze. might need to mutex calls to window.*
     }
     return 0;
 }

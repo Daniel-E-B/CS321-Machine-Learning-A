@@ -1,3 +1,4 @@
+#include <cmath>
 #include <random>
 
 #include <SFML/Graphics.hpp>
@@ -20,10 +21,11 @@ void Game::draw(sf::RenderWindow &window) {
     basket->draw(window);
 }
 
-void Game::setFood(sf::Vector2f &pos, sf::Vector2f &mvmntVec) {
-}
-
-bool Game::tick(sf::RenderWindow &window) {
+void Game::tick(sf::RenderWindow &window) {
     food->move(window);
     basket->move(*(new sf::Vector2f(food->getPos().x * MAX_SPEED_COMPONENT, food->getPos().y * MAX_SPEED_COMPONENT)));
+}
+
+double Game::fitness() {
+    return (sqrt(pow(food->getPos().x - basket->getPos().x, 2) + pow(food->getPos().y - basket->getPos().y, 2)));
 }

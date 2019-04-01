@@ -14,5 +14,6 @@ class Food {
     Food(sf::Vector2f &, sf::Vector2f &);
     void draw(sf::RenderWindow &);
     void move(sf::RenderWindow &);
+    void reset(sf::Vector2f &, sf::Vector2f &);
     sf::Vector2f getPos();
 };
