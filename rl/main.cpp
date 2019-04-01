@@ -7,6 +7,8 @@
 #include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
 int main() {
+    // network library testing:
+    ////////////////////////////////////////////////////////////////////////////////
     tiny_dnn::network<tiny_dnn::sequential> net;
     tiny_dnn::adagrad opt;
     net << tiny_dnn::layers::fc(2, 3) << tiny_dnn::activation::leaky_relu()
@@ -19,11 +21,12 @@ int main() {
 
     net.fit<tiny_dnn::mse>(opt, x_train, y_train, batch_size, epochs);
     tiny_dnn::vec_t result = net.predict({1, 0});
-    std::cout << result[0] << std::endl;
+    // std::cout << result[0] << std::endl;
     result = net.predict({1, 1});
-    std::cout << result[0] << std::endl;
-    net.save("net", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
+    // std::cout << result[0] << std::endl;
+    net.save("net.json", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
     // net.load("net", tiny_dnn::content_type::weights, tiny_dnn::file_format::);
+    ////////////////////////////////////////////////////////////////////////////////
 
     const int WIDTH = 1280, HEIGHT = 720;
 
@@ -44,7 +47,7 @@ int main() {
         }
         window.clear(sf::Color::Black);
 
-        g.tick();
+        g.tick(window);
         window.clear(sf::Color::Black);
         g.draw(window);
         window.display();

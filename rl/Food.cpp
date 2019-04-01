@@ -14,7 +14,23 @@ void Food::draw(sf::RenderWindow &window) {
     window.draw(shape);
 }
 
-void Food::move() {
-    // bounce if it moves offscreen by the angle off the wall
+void Food::move(sf::RenderWindow &window) {
+    // top collision
+    if (shape.getPosition().y - SIZE <= 0)
+        mvmntVec = *(new sf::Vector2f(mvmntVec.x, -mvmntVec.y));
+    // bottom collision
+    if (shape.getPosition().y + SIZE >= window.getSize().y)
+        mvmntVec = *(new sf::Vector2f(mvmntVec.x, -mvmntVec.y));
+    // left collision
+    if (shape.getPosition().x - SIZE <= 0)
+        mvmntVec = *(new sf::Vector2f(-mvmntVec.x, mvmntVec.y));
+    // right collision
+    if (shape.getPosition().x + SIZE >= window.getSize().x)
+        mvmntVec = *(new sf::Vector2f(-mvmntVec.x, mvmntVec.y));
+        
     shape.move(mvmntVec);
+}
+
+sf::Vector2f Food::getPos() {
+    return shape.getPosition();
 }

@@ -5,10 +5,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "Basket.hpp"
-#include "Drawable.hpp"
 #include "Food.hpp"
 
-class Game : public Drawable {
+class Game {
    private:
     Food *food;
     Basket *basket;
@@ -17,9 +16,9 @@ class Game : public Drawable {
 
    public:
     void draw(sf::RenderWindow &);
-    Game(sf::RenderWindow &);  // num foods
-    bool tick();                    // returns true if generation is complete
-    void mutate();                  // probably have parameters
-    void setFood(sf::Vector2f &, sf::Vector2f &);              // pos, mvmntvec
+    Game(sf::RenderWindow &);                      // num foods
+    bool tick(sf::RenderWindow &);                 // returns true if generation is complete
+    void mutate();                                 // probably have parameters
+    void setFood(sf::Vector2f &, sf::Vector2f &);  // pos, mvmntvec
     double getFitness();
 };

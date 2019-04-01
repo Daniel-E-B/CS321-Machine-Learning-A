@@ -2,9 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "GameObject.hpp"
 
-class Food : public GameObject {
+class Food {
    private:
     sf::CircleShape shape;
     const sf::Color COLOR = sf::Color(0, 127, 127);
@@ -14,5 +13,6 @@ class Food : public GameObject {
    public:
     Food(sf::Vector2f &, sf::Vector2f &);
     void draw(sf::RenderWindow &);
-    void move();
+    void move(sf::RenderWindow &);
+    sf::Vector2f getPos();
 };
