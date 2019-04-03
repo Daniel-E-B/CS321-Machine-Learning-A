@@ -24,3 +24,11 @@ void Basket::move(sf::Vector2f const &targetPos) { // TODO: make more things con
 sf::Vector2f Basket::getPos() {
     return shape.getPosition();
 }
+
+std::string Basket::getBrain(){
+    return net.to_json();
+}
+
+void Basket::setBrain(std::string &brain){
+    net.from_json(brain);
+}

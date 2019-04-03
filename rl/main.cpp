@@ -1,10 +1,17 @@
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include <SFML/Graphics.hpp>
 
 #include "Game.hpp"
 #include "tiny-dnn/tiny_dnn/tiny_dnn.h"
+
+void doGenerations(sf::RenderWindow &window, Game &g, int numGenerations, bool &stop) {
+    for(int i  = 0; i < numGenerations; ++i){
+        g.generation(window, 10, stop); // milliseconds of delay between ticks (make it variable? / user selectable?)
+    }
+}
 
 int main() {
     // network library testing:
@@ -25,7 +32,7 @@ int main() {
     result = net.predict({1, 1});
     // std::cout << result[0] << std::endl;
     net.save("net.json", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
-    // net.load("net", tiny_dnn::content_type::weights, tiny_dnn::file_format::);
+    // net.load("net", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
     ////////////////////////////////////////////////////////////////////////////////
 
     const int WIDTH = 1280, HEIGHT = 720;
@@ -37,17 +44,17 @@ int main() {
     window.setVerticalSyncEnabled(true);
 
     Game g(window);
-
+    bool stopGens = false;
+    std::thread gameThread(doGenerations, std::ref(window), std::ref(g), 10, std::ref(stopGens));
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
+                stopGens = true;
+                gameThread.join();
                 window.close();
             }
         }
-        window.clear(sf::Color::Black);
-
-        g.tick(window);
         window.clear(sf::Color::Black);
         g.draw(window);
         window.display();

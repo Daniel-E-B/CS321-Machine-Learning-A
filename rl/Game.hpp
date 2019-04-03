@@ -6,6 +6,7 @@
 
 #include "Basket.hpp"
 #include "Food.hpp"
+#include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
 class Game {
    private:
@@ -13,17 +14,20 @@ class Game {
     Basket *basket;
     int currentFood = 0;
     const int MAX_SPEED_COMPONENT = 5;
-    double fitness(); // ideal is 0
+    const int TICKS_PER_GENERATION = 150/*0*/; // TODO: tune
+    const int CREATURES = 200;
+    std::vector<double> fitnesses;
+    std::vector<std::string> brains;
+    double fitness();  // ideal is 0
+    void tick(sf::RenderWindow &);
+    void mutate();
     /*
     TODO: const paramters for:
-        * ticks / gen
         * mutation quantity & rate
      */
 
    public:
     void draw(sf::RenderWindow &);
-    Game(sf::RenderWindow &);       // num foods
-    void tick(sf::RenderWindow &);  // TODO: private
-    void mutate();                  // TODO: private
-    void generation();              // TODO: high level interface to go through each basket with a randomly generated food for n ticks, then mutate all
+    Game(sf::RenderWindow &);                                             
+    void generation(sf::RenderWindow &, unsigned long long int, bool &);  // TODO: high level interface to go through each basket with a randomly generated food for n ticks, then mutate all
 };
