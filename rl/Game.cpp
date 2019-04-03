@@ -42,7 +42,7 @@ void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq,
         // reset(); TODO: reset positions, load next brain
         for (int j = 0; j < TICKS_PER_GENERATION; ++j) {
             tick(window);
-            if (stop) break;
+            if (stop) return;
             std::this_thread::sleep_for(std::chrono::milliseconds(tickFreq));
         }
         // compute fitness:
