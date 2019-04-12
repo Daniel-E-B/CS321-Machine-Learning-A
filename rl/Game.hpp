@@ -13,10 +13,11 @@ class Game {
     Food *food;
     Basket *basket;
     const int MAX_SPEED_COMPONENT = 5;
-    const int TICKS_PER_GENERATION = 15/*0*/; // TODO: tune
+    const int TICKS_PER_GENERATION = 15/*00*/; // TODO: tune
     const int CREATURES = 200;
     const double MUTATION_RATE = 1; // % chance of mutation
     const double MUTATION_SIZE = 0.2; // max % size of mutation
+    const double SURVIVAL_RATE = 0.2; // % to keep unmutated (from top fitness)
     std::vector<double> fitnesses;
     std::vector<std::string> brains;
     double fitness();  // ideal is 0

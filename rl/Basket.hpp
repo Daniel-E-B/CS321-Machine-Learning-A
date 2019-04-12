@@ -10,6 +10,7 @@ class Basket {  // TODO: rename to Catcher or Chaser or something like that
     tiny_dnn::network<tiny_dnn::sequential> net;
     const sf::Color COLOR = sf::Color(127, 127, 0);
     const double SIZE = 30;  // width
+    const int MAX_SPEED_COMPONENT = 5;
     std::vector<float> recurrentOuts;
 
    public:

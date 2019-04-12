@@ -64,7 +64,6 @@ void Game::mutate() {
             }
         }
     }
-    // kill bottom 80%, replace with mutated versions of top 20%
 }
 
 void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq, bool &stop) {
