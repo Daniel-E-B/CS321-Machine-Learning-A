@@ -11,7 +11,7 @@ class Food {
     sf::Vector2f mvmntVec;
 
    public:
-    Food(sf::Vector2f &, sf::Vector2f &);
+    Food();
     void draw(sf::RenderWindow &);
     void move(sf::RenderWindow &);
     void reset(sf::Vector2f &, sf::Vector2f &);

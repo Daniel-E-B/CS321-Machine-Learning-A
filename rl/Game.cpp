@@ -1,4 +1,4 @@
-#include <chrono>
+#include <ctime>
 #include <cmath>
 #include <random>
 #include <thread>
@@ -9,15 +9,21 @@
 #include "Food.hpp"
 #include "Game.hpp"
 
+void Game::reset(sf::RenderWindow &window) {
+    std::mt19937_64 re(std::time(0));
+    std::uniform_real_distribution<double> velo(-MAX_SPEED_COMPONENT, MAX_SPEED_COMPONENT);
+    std::uniform_real_distribution<double> x(0, window.getSize().x);
+    std::uniform_real_distribution<double> y(0, window.getSize().y);
+
+    basket->setPos(*(new sf::Vector2f(x(re), y(re))));
+    food->reset(*(new sf::Vector2f(x(re), y(re))), *(new sf::Vector2f(velo(re), velo(re))));
+}
+
 Game::Game(sf::RenderWindow &window) {
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(-MAX_SPEED_COMPONENT, MAX_SPEED_COMPONENT);
-
-    food = new Food(*(new sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2)), *(new sf::Vector2f(dist(mt), (dist(mt)))));
-    basket = new Basket(*(new sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2)));
-
     fitnesses.resize(CREATURES);
+    food = new Food();
+    basket = new Basket();
+    reset(window);
 }
 
 void Game::draw(sf::RenderWindow &window) {
@@ -35,17 +41,19 @@ double Game::fitness() {
 }
 
 void Game::mutate() {
+    // kill bottom 80%, replace with mutated versions of top 20%
 }
 
 void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq, bool &stop) {
     for (int i = 0; i < CREATURES; ++i) {
-        // reset(); TODO: reset positions, load next brain
+        reset(window);
         for (int j = 0; j < TICKS_PER_GENERATION; ++j) {
             tick(window);
             if (stop) return;
             std::this_thread::sleep_for(std::chrono::milliseconds(tickFreq));
         }
-        // compute fitness:
         fitnesses[i] = fitness();
+        // load next brain:
     }
+    mutate();
 }

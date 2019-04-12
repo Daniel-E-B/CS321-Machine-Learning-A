@@ -12,19 +12,17 @@ class Game {
    private:
     Food *food;
     Basket *basket;
-    int currentFood = 0;
     const int MAX_SPEED_COMPONENT = 5;
     const int TICKS_PER_GENERATION = 150/*0*/; // TODO: tune
     const int CREATURES = 200;
+    const double MUTATION_RATE = 1; // % chance of mutation
+    const double MUTATION_SIZE = 0.2; // max % size of mutation
     std::vector<double> fitnesses;
     std::vector<std::string> brains;
     double fitness();  // ideal is 0
     void tick(sf::RenderWindow &);
     void mutate();
-    /*
-    TODO: const paramters for:
-        * mutation quantity & rate
-     */
+    void reset(sf::RenderWindow &);
 
    public:
     void draw(sf::RenderWindow &);

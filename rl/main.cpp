@@ -3,13 +3,14 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Game.hpp"
 #include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
 void doGenerations(sf::RenderWindow &window, Game &g, int numGenerations, bool &stop) {
-    for(int i  = 0; i < numGenerations; ++i){
-        g.generation(window, 10, stop); // milliseconds of delay between ticks (make it variable? / user selectable?)
+    for (int i = 0; i < numGenerations; ++i) {
+        g.generation(window, 10, stop);  // milliseconds of delay between ticks (make it variable? / user selectable?)
     }
 }
 
@@ -33,6 +34,13 @@ int main() {
     // std::cout << result[0] << std::endl;
     net.save("net.json", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
     // net.load("net", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // json library testing:
+    ////////////////////////////////////////////////////////////////////////////////
+    nlohmann::json j = nlohmann::json::parse(net.to_json(tiny_dnn::content_type::weights));
+    std::cout << j.at("value0").at("value0")[0] << std::endl;
+    net.from_json(j.dump(), tiny_dnn::content_type::weights);
     ////////////////////////////////////////////////////////////////////////////////
 
     const int WIDTH = 1280, HEIGHT = 720;
