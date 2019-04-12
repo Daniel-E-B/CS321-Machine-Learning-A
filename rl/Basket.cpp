@@ -1,3 +1,5 @@
+#include <nlohmann/json.hpp>
+
 #include "Basket.hpp"
 #include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
@@ -28,11 +30,12 @@ sf::Vector2f Basket::getPos() {
 }
 
 std::string Basket::getBrain() {
-    return net.to_json();
+    return net.to_json(tiny_dnn::content_type::weights);
 }
 
 void Basket::setBrain(std::string &brain) {
-    net.from_json(brain);
+    nlohmann::json j = nlohmann::json::parse(brain);
+    net.from_json(j.dump(), tiny_dnn::content_type::weights);
 }
 
 void Basket::setPos(sf::Vector2f &pos) {

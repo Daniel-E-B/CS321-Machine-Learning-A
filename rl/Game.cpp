@@ -1,9 +1,10 @@
-#include <ctime>
 #include <cmath>
+#include <ctime>
 #include <random>
 #include <thread>
 
 #include <SFML/Graphics.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Basket.hpp"
 #include "Food.hpp"
@@ -21,8 +22,13 @@ void Game::reset(sf::RenderWindow &window) {
 
 Game::Game(sf::RenderWindow &window) {
     fitnesses.resize(CREATURES);
+    brains.resize(CREATURES);
     food = new Food();
     basket = new Basket();
+    for (int i = 0; i < CREATURES; ++i) {
+        brains[i] = basket->getBrain();
+    }
+    mutate();
     reset(window);
 }
 
@@ -41,19 +47,37 @@ double Game::fitness() {
 }
 
 void Game::mutate() {
+    std::mt19937_64 re(std::time(0));
+    std::uniform_real_distribution<double> dist(-1, 1);
+    bool flag = true;
+    while (flag) {
+        flag = false;
+        for (int i = 1; i < fitnesses.size(); ++i) {
+            if (fitnesses[i] < fitnesses[i - 1]) {
+                flag = true;
+                double tmpF = fitnesses[i];
+                fitnesses[i] = fitnesses[i - 1];
+                fitnesses[i - 1] = tmpF;
+                std::string tmpB = brains[i];
+                brains[i] = brains[i - 1];
+                brains[i - 1] = tmpB;
+            }
+        }
+    }
     // kill bottom 80%, replace with mutated versions of top 20%
 }
 
 void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq, bool &stop) {
     for (int i = 0; i < CREATURES; ++i) {
         reset(window);
+        basket->setBrain(brains[i]);
+        fitnesses[i] = 0;
         for (int j = 0; j < TICKS_PER_GENERATION; ++j) {
+            fitnesses[i] += fitness();
             tick(window);
             if (stop) return;
             std::this_thread::sleep_for(std::chrono::milliseconds(tickFreq));
         }
-        fitnesses[i] = fitness();
-        // load next brain:
     }
     mutate();
 }
