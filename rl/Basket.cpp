@@ -13,6 +13,7 @@ Basket::Basket() {
     net << tiny_dnn::layers::fc(6, 5) << tiny_dnn::activation::leaky_relu()
         << tiny_dnn::layers::fc(5, 5) << tiny_dnn::activation::leaky_relu()
         << tiny_dnn::layers::fc(5, 4) << tiny_dnn::activation::tanh();
+    net.save("netree.json", tiny_dnn::content_type::weights, tiny_dnn::file_format::json);
 }
 
 void Basket::draw(sf::RenderWindow &window) {

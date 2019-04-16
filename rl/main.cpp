@@ -8,10 +8,15 @@
 #include "Game.hpp"
 #include "tiny-dnn/tiny_dnn/tiny_dnn.h"
 
-void doGenerations(sf::RenderWindow &window, Game &g, int numGenerations, bool &stop) {
+void doGenerations(sf::RenderWindow &window, Game &g, int numGenerations, int delay, bool &stop) {
     for (int i = 0; i < numGenerations; ++i) {
-        g.generation(window, 10, stop);  // milliseconds of delay between ticks (make it variable? / user selectable?)
+        std::cout << "GENERATION: " << i << std::endl;
+        if (i >= 98) {  //TODO: yuck fix make a slider for delay or something
+            g.generation(window, 10, stop);
+        }
+        g.generation(window, delay, stop);  // milliseconds of delay between ticks (make it variable? / user selectable?)
     }
+    stop = true;
 }
 
 int main() {
@@ -39,7 +44,7 @@ int main() {
     // json library testing:
     ////////////////////////////////////////////////////////////////////////////////
     nlohmann::json j = nlohmann::json::parse(net.to_json(tiny_dnn::content_type::weights));
-    std::cout << j.at("value0").at("value0")[0] << std::endl;
+    std::cout << std::stod(j.at("value0").at("value0")[0].dump()) * 2 << std::endl;
     net.from_json(j.dump(), tiny_dnn::content_type::weights);
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +58,8 @@ int main() {
 
     Game g(window);
     bool stopGens = false;
-    std::thread gameThread(doGenerations, std::ref(window), std::ref(g), 10, std::ref(stopGens));
+    int delay = 0;
+    std::thread gameThread(doGenerations, std::ref(window), std::ref(g), 100, std::ref(delay), std::ref(stopGens));
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -63,10 +69,6 @@ int main() {
                 window.close();
             }
         }
-        window.clear(sf::Color::Black);
-        g.draw(window);
-        window.display();
-        // TODO: call generation() in a thread, so that the window will not freeze. might need to mutex calls to window.*
     }
     return 0;
 }
