@@ -16,7 +16,7 @@ class Basket {  // TODO: rename to Catcher or Chaser or something like that
    public:
     Basket();
     void draw(sf::RenderWindow &);
-    void move(sf::Vector2f const &);
+    void move(sf::Vector2f const &, sf::RenderWindow &);
     sf::Vector2f getPos();
     std::string getBrain();
     void setBrain(std::string &);

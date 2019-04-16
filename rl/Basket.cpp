@@ -20,8 +20,8 @@ void Basket::draw(sf::RenderWindow &window) {
     window.draw(shape);
 }
 
-void Basket::move(sf::Vector2f const &targetPos) {                                                                                                     // TODO: make more things const when they don't need to change
-    tiny_dnn::vec_t pred = net.predict({shape.getPosition().x, shape.getPosition().y, targetPos.x, targetPos.y, recurrentOuts[0], recurrentOuts[1]});  // current pos, targetpos, recurrent
+void Basket::move(sf::Vector2f const &targetPos, sf::RenderWindow &window) {                                                                                                                                                               // TODO: make more things const when they don't need to change
+    tiny_dnn::vec_t pred = net.predict({shape.getPosition().x / window.getSize().x, shape.getPosition().y / window.getSize().y, targetPos.x / window.getSize().x, targetPos.y / window.getSize().y, recurrentOuts[0], recurrentOuts[1]});  // current pos, targetpos, recurrent
     shape.move(*(new sf::Vector2f(MAX_SPEED_COMPONENT * pred[0], MAX_SPEED_COMPONENT * pred[1])));
     recurrentOuts = {pred[2], pred[3]};
 }

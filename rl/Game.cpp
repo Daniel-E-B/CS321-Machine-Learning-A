@@ -42,7 +42,7 @@ void Game::draw(sf::RenderWindow &window) {
 
 void Game::tick(sf::RenderWindow &window) {
     food->move(window);
-    basket->move(*(new sf::Vector2f(food->getPos().x / window.getSize().x, food->getPos().y / window.getSize().y)));
+    basket->move(food->getPos(), window);
 }
 
 double Game::fitness() {
@@ -56,7 +56,7 @@ void Game::mutate() {
     while (flag) {
         flag = false;
         for (int i = 1; i < fitnesses.size(); ++i) {
-            if (fitnesses[i] > fitnesses[i - 1]) {
+            if (fitnesses[i] < fitnesses[i - 1]) {
                 flag = true;
                 double tmpF = fitnesses[i];
                 fitnesses[i] = fitnesses[i - 1];
@@ -67,7 +67,7 @@ void Game::mutate() {
             }
         }
     }
-    std::cout << "MAX FITNESS: " << fitnesses[0] << std::endl;
+    std::cout << "BEST FITNESS: " << fitnesses[0] << "      " << fitnesses[fitnesses.size()-1] << std::endl;
     std::srand(std::time(NULL));
     for (int i = floor(brains.size() * SURVIVAL_RATE); i < brains.size(); ++i) {
         brains[i] = brains[floor(i % int(floor(brains.size() * SURVIVAL_RATE)))];  // copy top few %
@@ -77,7 +77,7 @@ void Game::mutate() {
                 try {
                     for (int k = 0; k < json.at("value" + std::to_string(i)).at("value" + std::to_string(j)).size(); ++k) {
                         if (std::rand() <= MUTATION_RATE && json.at("value" + std::to_string(i)).at("value" + std::to_string(j))[k].is_number()) {
-                            json.at("value" + std::to_string(i)).at("value" + std::to_string(j))[k] = std::to_string(std::stod(json.at("value" + std::to_string(i)).at("value" + std::to_string(j))[k].dump()) * mut(re));
+                            json.at("value" + std::to_string(i)).at("value" + std::to_string(j))[k] = std::to_string(std::stod(json.at("value" + std::to_string(i)).at("value" + std::to_string(j))[k].dump()) + mut(re));
                         }
                     }
                 } catch (std::exception &e) {
@@ -89,6 +89,7 @@ void Game::mutate() {
 
 void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq, bool &stop) {
     double avgFit = 0;
+    double topAvg = 0;
     for (int i = 0; i < CREATURES; ++i) {
         reset(window);
         basket->setBrain(brains[i]);
@@ -105,7 +106,11 @@ void Game::generation(sf::RenderWindow &window, unsigned long long int tickFreq,
             }
         }
         avgFit += fitnesses[i];
+        if(i <= floor(brains.size() * SURVIVAL_RATE)){
+            topAvg+=fitnesses[i];
+        }
     }
     std::cout << "AVERAGE FITNESS: " << avgFit / CREATURES << std::endl;
+    std::cout << "TOP AVG FITNESS: " << topAvg / floor(brains.size() * SURVIVAL_RATE) << std::endl;
     mutate();
 }
