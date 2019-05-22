@@ -7,9 +7,7 @@ var txt = fs.readFileSync('../apps.csv', 'utf8').toString();
 
 var data = d3.csvParse(txt);
 
-// data.length == 403910
-
-for (let i = 150500; i < 161000; ++i) {
+for (let i = 0; i < data.length; ++i) {
     try {
         scraper.app({ appId: data[i].packageName }).then((app) => {
             fs.writeFile('app' + i + '.json', JSON.stringify(app), (err) => {
