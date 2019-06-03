@@ -2,3 +2,9 @@ node_modules
 *.json
 *.csv
 appdata*
+*.lock
+*.toml
+target
+rust-test
+
+
